@@ -18,7 +18,7 @@ defmodule Systemstats.Application do
       # Start a worker by calling: Systemstats.Worker.start_link(arg)
       # {Systemstats.Worker, arg}
       # Start the generators for OS statistics -> specific details per-generator can be found in its respective context/sub-context
-      # Systemstats.Datastreams.Cpustream.Generator
+      # Systemstats.Cpu.Cpuinfo.Generator
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

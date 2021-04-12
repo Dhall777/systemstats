@@ -5,12 +5,12 @@ defmodule SystemstatsWeb.CpuinfoLive do
 
   import Ecto.Query, warn: false
 
-  alias Systemstats.Datastreams
-  alias Systemstats.Datastreams.Cpustream.{ChartQuery}
+  alias Systemstats.Cpu
+  alias Systemstats.Cpu.Cpuinfo.{ChartQuery}
   alias Contex.{Dataset, LinePlot, Plot}
 
   def make_cpufreq_lineplot do
-    cpufreq_data = ChartQuery.fetch_cpustream_plotdata({0})
+    cpufreq_data = ChartQuery.fetch_cpuinfo_plotdata({0})
 
     plot_options = %{
       top_margin: 5,
@@ -41,8 +41,9 @@ defmodule SystemstatsWeb.CpuinfoLive do
         300,
         mapping: %{x_col: "Time", y_cols: ["cpu_MHz"]},
         plot_options: plot_options,
-        title: "CPU MHz (core: 0)",
+        title: "core: 0",
         x_label: "Time (UTC)",
+        y_label: "core frequency (MHz)",
         legend_setting: :legend_right
       )
 
@@ -62,18 +63,18 @@ defmodule SystemstatsWeb.CpuinfoLive do
   # Then, assign the chart view to the socket
   def mount(_params, _session, socket) do
     if connected?(socket) do
-      Datastreams.subscribe()
+      Cpu.subscribe()
     end
 
     # {:ok, socket}
-    {:ok, socket, temporary_assigns: [cpustreams: []]}
+    {:ok, socket, temporary_assigns: [cpuinfos: []]}
   end
 
   # Handle pubsub message, which refreshes page
   # Also, fix the "no function clause matching" error; why is the message being delivered, even with this error?
-  def handle_info({:cpustream_inserted, new_cpustream}, socket) do
-    updated_cpustreams = socket.assigns[:cpustreams] ++ [new_cpustream]
+  def handle_info({:cpuinfo_inserted, new_cpuinfo}, socket) do
+    updated_cpuinfos = socket.assigns[:cpuinfos] ++ [new_cpuinfo]
 
-    {:noreply, socket |> assign(:cpustreams, updated_cpustreams)}
+    {:noreply, socket |> assign(:cpuinfos, updated_cpuinfos)}
   end
 end

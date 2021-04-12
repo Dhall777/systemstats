@@ -1,9 +1,9 @@
-defmodule Systemstats.Datastreams.Cpustream do
+defmodule Systemstats.Cpu.Cpuinfo do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  schema "cpustreams" do
+  schema "cpuinfos" do
     field(:processor, :integer)
     field(:vendor_id, :string)
     field(:cpu_family, :integer)
@@ -17,8 +17,8 @@ defmodule Systemstats.Datastreams.Cpustream do
     timestamps()
   end
 
-  def changeset(cpustream, attrs \\ %{}) do
-    cpustream
+  def changeset(cpuinfo, attrs \\ %{}) do
+    cpuinfo
     |> cast(attrs, [
       :processor,
       :vendor_id,

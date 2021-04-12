@@ -1,8 +1,8 @@
-defmodule Systemstats.Repo.Migrations.CreateCpustreams do
+defmodule Systemstats.Repo.Migrations.CreateCpuinfos do
   use Ecto.Migration
 
   def change do
-    create table(:cpustreams) do
+    create table(:cpuinfos) do
       add :processor, :integer
       add :vendor_id, :string
       add :cpu_family, :integer
