@@ -1,4 +1,6 @@
 defmodule Systemstats.Cpu.Cpuinfo.Generator do
+  alias Systemstats.Cpu
+
   use GenServer
 
   import Ecto.Query, warn: false
@@ -35,7 +37,7 @@ defmodule Systemstats.Cpu.Cpuinfo.Generator do
     create_freq_a_float = String.slice(freq_a_clean, 8..16) |> String.to_float()
 
     # Insert cleaned data -> this function is pulled from our context, alias it at some point...
-    Systemstats.Cpu.create_cpuinfo(%{
+    Cpu.create_cpuinfo(%{
       create_proc_a_atom => create_proc_a_int,
       create_freq_a_atom => create_freq_a_float
     })

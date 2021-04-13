@@ -1,16 +1,16 @@
-defmodule SystemstatsWeb.CpuinfoLive do
+defmodule SystemstatsWeb.MeminfoLive do
   # use Phoenix.LiveView
   use SystemstatsWeb, :live_view
   use Phoenix.HTML
 
   import Ecto.Query, warn: false
 
-  alias Systemstats.Cpu
-  alias Systemstats.Cpu.Cpuinfo.{ChartQuery}
+  alias Systemstats.Mem
+  alias Systemstats.Mem.Meminfo.{ChartQuery}
   alias Contex.{Dataset, LinePlot, Plot}
 
-  def make_cpufreq_lineplot do
-    cpufreq_data = ChartQuery.fetch_cpuinfo_plotdata({0})
+  def make_meminfo_lineplot do
+    meminfo_data = ChartQuery.fetch_meminfo_plotdata()
 
     plot_options = %{
       top_margin: 5,
@@ -24,14 +24,14 @@ defmodule SystemstatsWeb.CpuinfoLive do
     }
 
     map_to_metalist =
-      cpufreq_data
-      |> Enum.map(fn %{inserted_at: timestamp, processor: processor, cpu_MHz: cpu_MHz} ->
-        [timestamp, processor, cpu_MHz]
+      meminfo_data
+      |> Enum.map(fn %{inserted_at: timestamp, MemFree: memfree} ->
+        [timestamp, memfree]
       end)
 
     metalist_to_struct =
       map_to_metalist
-      |> Dataset.new(["Time", "Processor", "cpu_MHz"])
+      |> Dataset.new(["Time", "MemFree"])
 
     struct_to_plot_params =
       metalist_to_struct
@@ -39,22 +39,22 @@ defmodule SystemstatsWeb.CpuinfoLive do
         LinePlot,
         600,
         300,
-        mapping: %{x_col: "Time", y_cols: ["cpu_MHz"]},
+        mapping: %{x_col: "Time", y_cols: ["MemFree"]},
         plot_options: plot_options,
-        title: "core: 0",
+        title: "Memory info (general)",
         x_label: "Time (UTC)",
-        y_label: "core frequency (MHz)",
+        y_label: "Memory used (kB)",
         legend_setting: :legend_right
       )
 
     # Generate SVG
-    cpufreq_lineplot = struct_to_plot_params |> Plot.to_svg()
+    meminfo_lineplot = struct_to_plot_params |> Plot.to_svg()
   end
 
   def render(assigns) do
     ~L"""
       <div class="column">
-        <%= make_cpufreq_lineplot %>
+        <%= make_meminfo_lineplot %>
       </div>
     """
   end
@@ -63,17 +63,17 @@ defmodule SystemstatsWeb.CpuinfoLive do
   # Then, assign the chart view to the socket, if connected
   def mount(_params, _session, socket) do
     if connected?(socket) do
-      Cpu.subscribe()
+      Mem.subscribe()
     end
 
     # {:ok, socket}
-    {:ok, socket, temporary_assigns: [cpuinfos: []]}
+    {:ok, socket, temporary_assigns: [meminfos: []]}
   end
 
   # Handle pubsub message, then update socket with new assigns to trigger page re-render
-  def handle_info({:cpuinfo_inserted, new_cpuinfo}, socket) do
-    updated_cpuinfos = socket.assigns[:cpuinfos] ++ [new_cpuinfo]
+  def handle_info({:meminfo_inserted, new_meminfo}, socket) do
+    updated_meminfos = socket.assigns[:meminfos] ++ [new_meminfo]
 
-    {:noreply, socket |> assign(:cpuinfos, updated_cpuinfos)}
+    {:noreply, socket |> assign(:meminfos, updated_meminfos)}
   end
 end

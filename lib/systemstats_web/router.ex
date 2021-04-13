@@ -19,6 +19,7 @@ defmodule SystemstatsWeb.Router do
 
     live "/", PageLive, :index
     live "/cpuinfo", CpuinfoLive, :index
+    live "/meminfo", MeminfoLive, :index
   end
 
   # Other scopes may use custom stacks.
