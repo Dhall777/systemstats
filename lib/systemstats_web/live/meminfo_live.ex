@@ -25,25 +25,25 @@ defmodule SystemstatsWeb.MeminfoLive do
 
     map_to_metalist =
       meminfo_data
-      |> Enum.map(fn %{inserted_at: timestamp, MemFree: memfree} ->
-        [timestamp, memfree]
+      |> Enum.map(fn %{inserted_at: timestamp, MemFree: memfree, MemAvailable: memavailable, Buffers: buffers, Cached: cached, Active: active, Dirty: dirty, SwapFree: swapfree, NFS_Unstable: nfs_unstable} ->
+        [timestamp, memfree, memavailable, buffers, cached, active, dirty, swapfree, nfs_unstable]
       end)
 
     metalist_to_struct =
       map_to_metalist
-      |> Dataset.new(["Time", "MemFree"])
+      |> Dataset.new(["Time", "MemFree", "MemAvailable", "Buffers", "Cached", "Active", "Dirty", "SwapFree", "NFS_Unstable"])
 
     struct_to_plot_params =
       metalist_to_struct
       |> Plot.new(
         LinePlot,
-        600,
-        300,
-        mapping: %{x_col: "Time", y_cols: ["MemFree"]},
+        950,
+        550,
+        mapping: %{x_col: "Time", y_cols: ["MemFree", "MemAvailable", "Buffers", "Cached", "Active", "Dirty", "SwapFree", "NFS_Unstable"]},
         plot_options: plot_options,
         title: "Memory info (general)",
         x_label: "Time (UTC)",
-        y_label: "Memory used (kB)",
+        y_label: "Memory (kB)",
         legend_setting: :legend_right
       )
 
@@ -53,7 +53,11 @@ defmodule SystemstatsWeb.MeminfoLive do
 
   def render(assigns) do
     ~L"""
-      <div class="column">
+      <div class="row">
+        <phx-click="meminfo_manpage"><a href="/meminfo_manpage"</a>
+      </div>
+
+      <div class="row">
         <%= make_meminfo_lineplot %>
       </div>
     """
@@ -75,5 +79,10 @@ defmodule SystemstatsWeb.MeminfoLive do
     updated_meminfos = socket.assigns[:meminfos] ++ [new_meminfo]
 
     {:noreply, socket |> assign(:meminfos, updated_meminfos)}
+  end
+
+  # Handle phx-click event; routes users to meminfo's manpage
+  def handle_event("meminfo_manpage", _value, socket) do
+    {:noreply, socket}
   end
 end
