@@ -29,25 +29,25 @@ defmodule Systemstats.Mem.Meminfo.Generator do
     #create_mem_a_int = String.slice(mem_a_clean, 7..13) |> String.to_integer()
 
     # (b) generate & insert MemAvailable data from /proc/meminfo
-    b_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_b = String.slice(b_mem, 56..79)
-    mem_b_clean = String.replace(mem_b, ":   ", "")
-    create_mem_b_atom = String.slice(mem_b_clean, 0..11) |> String.to_atom()
-    create_mem_b_int = String.slice(mem_b_clean, 12..19) |> String.to_integer()
+    #b_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    #mem_b = String.slice(b_mem, 56..79)
+    #mem_b_clean = String.replace(mem_b, ":   ", "")
+    #create_mem_b_atom = String.slice(mem_b_clean, 0..11) |> String.to_atom()
+    #create_mem_b_int = String.slice(mem_b_clean, 12..19) |> String.to_integer()
 
     # (c) generate & insert Buffers data from /proc/meminfo
-    c_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_c = String.slice(b_mem, 84..107)
-    mem_c_clean = String.replace(mem_c, ":          ", "")
-    create_mem_c_atom = String.slice(mem_c_clean, 0..6) |> String.to_atom()
-    create_mem_c_int = String.slice(mem_c_clean, 7..13) |> String.to_integer()
+    #c_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    #mem_c = String.slice(b_mem, 84..107)
+    #mem_c_clean = String.replace(mem_c, ":          ", "")
+    #create_mem_c_atom = String.slice(mem_c_clean, 0..6) |> String.to_atom()
+    #create_mem_c_int = String.slice(mem_c_clean, 7..13) |> String.to_integer()
 
     # (d) generate & insert Cached data from /proc/meminfo
-    d_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_d = String.slice(d_mem, 112..135)
-    mem_d_clean = String.replace(mem_d, ":          ", "")
-    create_mem_d_atom = String.slice(mem_d_clean, 0..5) |> String.to_atom()
-    create_mem_d_int = String.slice(mem_d_clean, 6..13) |> String.to_integer()
+    #d_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    #mem_d = String.slice(d_mem, 112..135)
+    #mem_d_clean = String.replace(mem_d, ":          ", "")
+    #create_mem_d_atom = String.slice(mem_d_clean, 0..5) |> String.to_atom()
+    #create_mem_d_int = String.slice(mem_d_clean, 6..13) |> String.to_integer()
 
     # (e) generate & insert Active data from /proc/meminfo
     e_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
@@ -64,11 +64,11 @@ defmodule Systemstats.Mem.Meminfo.Generator do
     #create_mem_f_int = String.slice(mem_f_clean, 5..6) |> String.to_integer()
 
     # (g) generate & insert SwapFree data from /proc/meminfo
-    g_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_g = String.slice(g_mem, 420..443)
-    mem_g_clean = String.replace(mem_g, ":       ", "")
-    create_mem_g_atom = String.slice(mem_g_clean, 0..7) |> String.to_atom()
-    create_mem_g_int = String.slice(mem_g_clean, 8..15) |> String.to_integer()
+    #g_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    #mem_g = String.slice(g_mem, 420..443)
+    #mem_g_clean = String.replace(mem_g, ":       ", "")
+    #create_mem_g_atom = String.slice(mem_g_clean, 0..7) |> String.to_atom()
+    #create_mem_g_int = String.slice(mem_g_clean, 8..15) |> String.to_integer()
 
     # (h) generate & insert PageTables data from /proc/meminfo
     # h_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
@@ -82,12 +82,7 @@ defmodule Systemstats.Mem.Meminfo.Generator do
 
     # Insert cleaned data
     Mem.create_meminfo(%{
-      create_mem_b_atom => create_mem_b_int,
-      create_mem_c_atom => create_mem_c_int,
-      create_mem_d_atom => create_mem_d_int,
       create_mem_e_atom => create_mem_e_int,
-      create_mem_g_atom => create_mem_g_int,
-      create_mem_h_atom => create_mem_h_int,
     })
   end
 
