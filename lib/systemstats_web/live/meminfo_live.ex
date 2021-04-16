@@ -25,13 +25,13 @@ defmodule SystemstatsWeb.MeminfoLive do
 
     map_to_metalist =
       meminfo_data
-      |> Enum.map(fn %{inserted_at: timestamp, MemFree: memfree, MemAvailable: memavailable, Buffers: buffers, Cached: cached, Active: active, Dirty: dirty, SwapFree: swapfree, NFS_Unstable: nfs_unstable} ->
-        [timestamp, memfree, memavailable, buffers, cached, active, dirty, swapfree, nfs_unstable]
+      |> Enum.map(fn %{inserted_at: timestamp, MemAvailable: memavailable, Buffers: buffers, Cached: cached, Active: active, SwapFree: swapfree, PageTables: pagetables} ->
+        [timestamp, memavailable, buffers, cached, active, swapfree, pagetables]
       end)
 
     metalist_to_struct =
       map_to_metalist
-      |> Dataset.new(["Time", "MemFree", "MemAvailable", "Buffers", "Cached", "Active", "Dirty", "SwapFree", "NFS_Unstable"])
+      |> Dataset.new(["Time", "MemAvailable", "Buffers", "Cached", "Active", "SwapFree", "PageTables"])
 
     struct_to_plot_params =
       metalist_to_struct
@@ -39,11 +39,11 @@ defmodule SystemstatsWeb.MeminfoLive do
         LinePlot,
         950,
         550,
-        mapping: %{x_col: "Time", y_cols: ["MemFree", "MemAvailable", "Buffers", "Cached", "Active", "Dirty", "SwapFree", "NFS_Unstable"]},
+        mapping: %{x_col: "Time", y_cols: ["MemAvailable", "Buffers", "Cached", "Active", "SwapFree", "PageTables"]},
         plot_options: plot_options,
-        title: "Memory info (general)",
-        x_label: "Time (UTC)",
-        y_label: "Memory (kB)",
+        title: "Memory info - Kupe",
+        x_label: "Time - UTC",
+        y_label: "Memory - kB",
         legend_setting: :legend_right
       )
 
@@ -74,14 +74,14 @@ defmodule SystemstatsWeb.MeminfoLive do
     {:ok, socket, temporary_assigns: [meminfos: []]}
   end
 
-  # Handle pubsub message, then update socket with new assigns to trigger page re-render
+  # Handle pubsub message, which triggers the socket to update "assigns" data; this event results in re-render of changed data
   def handle_info({:meminfo_inserted, new_meminfo}, socket) do
     updated_meminfos = socket.assigns[:meminfos] ++ [new_meminfo]
 
     {:noreply, socket |> assign(:meminfos, updated_meminfos)}
   end
 
-  # Handle phx-click event; routes users to meminfo's manpage
+  # Handle phx-click event; this event routes users to the 'meminfo' manpage
   def handle_event("meminfo_manpage", _value, socket) do
     {:noreply, socket}
   end

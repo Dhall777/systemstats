@@ -8,7 +8,7 @@ defmodule Systemstats.Mem.Meminfo.ChartQuery do
       from m in Meminfo,
         order_by: [desc: :inserted_at],
         limit: ^limit,
-        select: %{MemFree: m."MemFree", MemAvailable: m."MemAvailable", Buffers: m."Buffers", Cached: m."Cached", Active: m."Active", Dirty: m."Dirty", SwapFree: m."SwapFree", NFS_Unstable: m."NFS_Unstable", inserted_at: m.inserted_at}
+        select: %{MemAvailable: m."MemAvailable", Buffers: m."Buffers", Cached: m."Cached", Active: m."Active", SwapFree: m."SwapFree", PageTables: m."PageTables", inserted_at: m.inserted_at}
 
     Systemstats.Repo.all(meminfo)
   end
