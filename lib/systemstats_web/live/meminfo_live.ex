@@ -25,13 +25,13 @@ defmodule SystemstatsWeb.MeminfoLive do
 
     map_to_metalist =
       meminfo_data
-      |> Enum.map(fn %{inserted_at: timestamp, MemAvailable: memavailable, Buffers: buffers, Cached: cached, Active: active, SwapFree: swapfree, PageTables: pagetables} ->
-        [timestamp, memavailable, buffers, cached, active, swapfree, pagetables]
+      |> Enum.map(fn %{inserted_at: timestamp, Active: active} ->
+        [timestamp, active]
       end)
 
     metalist_to_struct =
       map_to_metalist
-      |> Dataset.new(["Time", "MemAvailable", "Buffers", "Cached", "Active", "SwapFree", "PageTables"])
+      |> Dataset.new(["Time", "Active"])
 
     struct_to_plot_params =
       metalist_to_struct
@@ -39,9 +39,9 @@ defmodule SystemstatsWeb.MeminfoLive do
         LinePlot,
         950,
         550,
-        mapping: %{x_col: "Time", y_cols: ["MemAvailable", "Buffers", "Cached", "Active", "SwapFree", "PageTables"]},
+        mapping: %{x_col: "Time", y_cols: ["Active"]},
         plot_options: plot_options,
-        title: "Memory info - Kupe",
+        title: "Memory info - GPL/CIL servers",
         x_label: "Time - UTC",
         y_label: "Memory - kB",
         legend_setting: :legend_right
