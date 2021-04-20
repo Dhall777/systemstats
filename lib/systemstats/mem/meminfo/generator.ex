@@ -22,7 +22,7 @@ defmodule Systemstats.Mem.Meminfo.Generator do
 
   def clean_insert_memory_data() do
 
-    # (a) generate & insert Active data from /proc/meminfo - Shackleton (local)
+    # (a) generate & insert Active data from /proc/meminfo - Kupe (local)
     a_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
     mem_a = String.slice(a_mem, 168..191)
     mem_a_clean_prep = String.replace(mem_a, ~r(:), "")
