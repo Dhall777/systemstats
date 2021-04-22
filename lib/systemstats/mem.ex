@@ -19,7 +19,7 @@ defmodule Systemstats.Mem do
   def get_meminfo!(id), do: Repo.get!(Meminfo, id)
 
   # Create meminfo and insert new record into meminfos table
-  # Then, broadcast status to subscribers via notification, which is delivered in their local message box
+  # Then, broadcast the event to subscribers via notification, which is delivered in their local message box
   def create_meminfo(attrs \\ %{}) do
     %Meminfo{}
     |> Meminfo.changeset(attrs)
