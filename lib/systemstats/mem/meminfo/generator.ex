@@ -27,7 +27,7 @@ defmodule Systemstats.Mem.Meminfo.Generator do
     mem_a = String.slice(a_mem, 168..191)
     mem_a_clean_prep = String.replace(mem_a, ~r(:), "")
     mem_a_clean = String.replace(mem_a_clean_prep, ~r( ), "")
-    create_mem_a_atom = String.slice(mem_a_clean, 0..5) |> String.to_atom()
+    create_mem_a_atom = String.slice(mem_a_clean, 0..5) |> String.to_existing_atom()
     create_mem_a_int = String.slice(mem_a_clean, 6..150) |> String.to_integer()
 
     # Insert cleaned data
