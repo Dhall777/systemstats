@@ -24,7 +24,7 @@ defmodule Systemstats.Mem.Meminfo.Generator do
 
     # (a) generate & insert Active data from /proc/meminfo - Tabei (local)
     a_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_a = String.slice(a_mem, 168..191)
+    mem_a = String.slice(a_mem, 171..194)
     mem_a_clean_prep = String.replace(mem_a, ~r(:), "")
     mem_a_clean = String.replace(mem_a_clean_prep, ~r( ), "")
     create_mem_a_atom = String.slice(mem_a_clean, 0..5) |> String.to_existing_atom()
