@@ -7,19 +7,22 @@ defmodule Systemstats.Application do
 
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
-      Systemstats.Repo,
+      # Start the Ecto repositories (each have their own DB)
+      Systemstats.ShackletonRepo,
+      Systemstats.BattutaRepo,
+      Systemstats.KupeRepo,
+      Systemstats.TabeiRepo,
       # Start the Telemetry supervisor
       SystemstatsWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Systemstats.PubSub},
       # Start the Endpoint (http/https)
-      SystemstatsWeb.Endpoint,
+      SystemstatsWeb.Endpoint
       # Start a worker by calling: Systemstats.Worker.start_link(arg)
       # {Systemstats.Worker, arg}
       # Start the generators for OS statistics -> specific details per-generator can be found in its respective context/sub-context
       # Systemstats.Cpu.Cpuinfo.Generator,
-      Systemstats.Mem.Meminfo.Generator
+      # Systemstats.Mem.Meminfo.Generator
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

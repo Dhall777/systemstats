@@ -12,6 +12,6 @@ defmodule Systemstats.Cpu.Cpuinfo.ChartQuery do
         limit: ^limit,
         select: %{processor: c.processor, cpu_MHz: c.cpu_MHz, inserted_at: c.inserted_at}
 
-    Systemstats.Repo.all(cpuinfo)
+    Systemstats.ShackletonRepo.all(cpuinfo)
   end
 end

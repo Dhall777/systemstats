@@ -31,7 +31,7 @@ defmodule Systemstats.Mem.Meminfo.Generator do
     create_mem_a_int = String.slice(mem_a_clean, 6..150) |> String.to_integer()
 
     # Insert cleaned data
-    Mem.create_meminfo(%{
+    Mem.shackleton_create_meminfo(%{
       create_mem_a_atom => create_mem_a_int,
     })
   end

@@ -1,4 +1,4 @@
-defmodule Systemstats.Repo.Migrations.CreateCpuinfos do
+defmodule Systemstats.ShackletonRepo.Migrations.CreateCpuinfos do
   use Ecto.Migration
 
   def change do

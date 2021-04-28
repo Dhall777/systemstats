@@ -1,4 +1,4 @@
-defmodule Systemstats.Repo.Migrations.CreateMeminfos do
+defmodule Systemstats.ShackletonRepo.Migrations.CreateMeminfos do
   use Ecto.Migration
 
   def change do

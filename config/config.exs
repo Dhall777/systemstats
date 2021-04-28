@@ -8,7 +8,11 @@
 use Mix.Config
 
 config :systemstats,
-  ecto_repos: [Systemstats.Repo]
+  ecto_repos:
+    [Systemstats.ShackletonRepo]
+    [Systemstats.BattutaRepo]
+    [Systemstats.KupeRepo]
+    [Systemstats.TabeiRepo]
 
 # Configures the endpoint
 config :systemstats, SystemstatsWeb.Endpoint,

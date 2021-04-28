@@ -2,7 +2,11 @@
 defmodule Systemstats.Mem do
   import Ecto.Query, warn: false
 
-  alias Systemstats.Repo
+  alias Systemstats.ShackletonRepo
+  alias Systemstats.BattutaRepo
+  alias Systemstats.KupeRepo
+  alias Systemstats.TabeiRepo
+
   alias Systemstats.Mem.Meminfo
 
   # topic naming for pubsub uses the module name, to keep things unique. I don't think you can have duplicate module names...maybe...
@@ -10,33 +14,52 @@ defmodule Systemstats.Mem do
 
   # BEGIN API CONFIGURATION
   #
-  # Returns a list of all meminfo records
-  def list_meminfos do
-    Repo.all(Meminfos)
+  # Shackleton API functions 
+  # Returns a list of all meminfo records from systemstats_shackleton DB
+  def shackleton_list_meminfos do
+    ShackletonRepo.all(Meminfos)
   end
 
   # Returns a single record of meminfo
-  def get_meminfo!(id), do: Repo.get!(Meminfo, id)
+  def shackleton_get_meminfo!(id), do: ShackletonRepo.get!(Meminfo, id)
 
   # Create meminfo and insert new record into meminfos table
   # Then, broadcast the event to subscribers via notification, which is delivered in their local message box
-  def create_meminfo(attrs \\ %{}) do
+  def shackleton_create_meminfo(attrs \\ %{}) do
     %Meminfo{}
     |> Meminfo.changeset(attrs)
-    |> Repo.insert()
+    |> ShackletonRepo.insert()
     |> broadcast(:meminfo_inserted)
   end
 
   # Update meminfo record
-  def update_meminfo(%Meminfo{} = meminfo, attrs) do
+  def shackleton_update_meminfo(%Meminfo{} = meminfo, attrs) do
     meminfo
     |> Meminfo.changeset(attrs)
-    |> Repo.update()
+    |> ShackletonRepo.update()
   end
 
   # Deletes meminfo record
-  def delete_meminfo(%Meminfo{} = meminfo) do
-    Repo.delete(meminfo)
+  def shackleton_delete_meminfo(%Meminfo{} = meminfo) do
+    ShackletonRepo.delete(meminfo)
+  end
+
+  # Battuta API functions
+  # Returns a list of all meminfo records from systemstats_battuta DB
+  def battuta_list_meminfos do
+    BattutaRepo.all(Meminfos)
+  end
+
+  # Kupe API functions
+  # Returns a list of all meminfo records from systemstats_kupe DB
+  def kupe_list_meminfos do
+    KupeRepo.all(Meminfos)
+  end
+
+  # Tabei API functions
+  # Returns a list of all meminfo records from systemstats_tabei DB
+  def tabei_list_meminfos do
+    TabeiRepo.all(Meminfos)
   end
 
   # Returns an Ecto changeset for tracking meminfo changes
