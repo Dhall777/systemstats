@@ -1,3 +1,4 @@
+# for tips, visit https://github.com/elixir-ecto/ecto/blob/v2.2.9/lib/ecto/query/api.ex
 defmodule Systemstats.Mem.Meminfo.ChartQuery do
   import Ecto.Query, warn: false
 

@@ -22,71 +22,137 @@ defmodule Systemstats.Mem.Meminfo.Generator do
 
   def clean_insert_memory_data() do
     # (a) generate & insert MemFree data from /proc/meminfo
-    a_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_a = String.slice(a_mem, 28..51)
-    mem_a_clean_prep = String.replace(mem_a, ~r(:), "")
-    mem_a_clean = String.replace(mem_a_clean_prep, ~r( ), "")
-    create_mem_a_atom = String.slice(mem_a_clean, 0..6) |> String.to_atom()
-    create_mem_a_int = String.slice(mem_a_clean, 7..120) |> String.to_integer()
+    a_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0) 
+    a_mem_prep_a = String.replace(a_mem_raw, ~r(kB\n), "")
+    a_mem_prep_b = String.replace(a_mem_prep_a, ~r(0\n), "")
+    a_mem_prep_c = String.replace(a_mem_prep_b, ~r(:), "")
+    a_mem_prep_d = String.replace(a_mem_prep_c, ~r( ), "")
+    a_mem_prep_e = String.replace(a_mem_prep_d, ~r(_), "0")
+    a_mem_prep_final = Regex.run(~r(MemFree[0-9]{1,100}), a_mem_prep_e) |> List.to_string()
+    create_mem_a_atom = String.slice(a_mem_prep_final, 0..6) |> String.to_atom()
+    create_mem_a_int = String.slice(a_mem_prep_final, 7..700) |> String.to_integer()
 
     # (b) generate & insert MemAvailable data from /proc/meminfo
-    b_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_b = String.slice(b_mem, 56..79)
-    mem_b_clean_prep = String.replace(mem_b, ~r(:), "")
-    mem_b_clean = String.replace(mem_b_clean_prep, ~r( ), "")
-    create_mem_b_atom = String.slice(mem_b_clean, 0..11) |> String.to_atom()
-    create_mem_b_int = String.slice(mem_b_clean, 12..170) |> String.to_integer()
+    b_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    b_mem_prep_a = String.replace(b_mem_raw, ~r(kB\n), "")
+    b_mem_prep_b = String.replace(b_mem_prep_a, ~r(0\n), "")
+    b_mem_prep_c = String.replace(b_mem_prep_b, ~r(:), "")
+    b_mem_prep_d = String.replace(b_mem_prep_c, ~r( ), "")
+    b_mem_prep_e = String.replace(b_mem_prep_d, ~r(_), "0")
+    b_mem_prep_final = Regex.run(~r(MemAvailable[0-9]{1,100}), b_mem_prep_e) |> List.to_string()
+    create_mem_b_atom = String.slice(b_mem_prep_final, 0..11) |> String.to_atom()
+    create_mem_b_int = String.slice(b_mem_prep_final, 12..120) |> String.to_integer()
 
     # (c) generate & insert Buffers data from /proc/meminfo
-    c_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_c = String.slice(c_mem, 84..107)
-    mem_c_clean_prep = String.replace(mem_c, ~r(:), "")
-    mem_c_clean = String.replace(mem_c_clean_prep, ~r( ), "")
-    create_mem_c_atom = String.slice(mem_c_clean, 0..6) |> String.to_atom()
-    create_mem_c_int = String.slice(mem_c_clean, 7..120) |> String.to_integer()
+    c_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    c_mem_prep_a = String.replace(c_mem_raw, ~r(kB\n), "")
+    c_mem_prep_b = String.replace(c_mem_prep_a, ~r(0\n), "")
+    c_mem_prep_c = String.replace(c_mem_prep_b, ~r(:), "")
+    c_mem_prep_d = String.replace(c_mem_prep_c, ~r( ), "")
+    c_mem_prep_e = String.replace(c_mem_prep_d, ~r(_), "0")
+    c_mem_prep_final = Regex.run(~r(Buffers[0-9]{1,100}), c_mem_prep_e) |> List.to_string()
+    create_mem_c_atom = String.slice(c_mem_prep_final, 0..6) |> String.to_atom()
+    create_mem_c_int = String.slice(c_mem_prep_final, 7..700) |> String.to_integer()
 
     # (d) generate & insert Cached data from /proc/meminfo
-    d_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_d = String.slice(d_mem, 112..135)
-    mem_d_clean_prep = String.replace(mem_d, ~r(:), "")
-    mem_d_clean = String.replace(mem_d_clean_prep, ~r( ), "")
-    create_mem_d_atom = String.slice(mem_d_clean, 0..5) |> String.to_atom()
-    create_mem_d_int = String.slice(mem_d_clean, 6..110) |> String.to_integer()
+    d_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    d_mem_prep_a = String.replace(d_mem_raw, ~r(kB\n), "")
+    d_mem_prep_b = String.replace(d_mem_prep_a, ~r(0\n), "")
+    d_mem_prep_c = String.replace(d_mem_prep_b, ~r(:), "")
+    d_mem_prep_d = String.replace(d_mem_prep_c, ~r( ), "")
+    d_mem_prep_e = String.replace(d_mem_prep_d, ~r(_), "0")
+    d_mem_prep_final = Regex.run(~r(Cached[0-9]{1,100}), d_mem_prep_e) |> List.to_string()
+    create_mem_d_atom = String.slice(d_mem_prep_final, 0..5) |> String.to_atom()
+    create_mem_d_int = String.slice(d_mem_prep_final, 6..600) |> String.to_integer()
 
     # (e) generate & insert Active data from /proc/meminfo
-    e_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_e = String.slice(e_mem, 168..191)
-    mem_e_clean_prep = String.replace(mem_e, ~r(:), "")
-    mem_e_clean = String.replace(mem_e_clean_prep, ~r( ), "")
-    create_mem_e_atom = String.slice(mem_e_clean, 0..5) |> String.to_atom()
-    create_mem_e_int = String.slice(mem_e_clean, 6..110) |> String.to_integer()
+    e_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    e_mem_prep_a = String.replace(e_mem_raw, ~r(kB\n), "")
+    e_mem_prep_b = String.replace(e_mem_prep_a, ~r(0\n), "")
+    e_mem_prep_c = String.replace(e_mem_prep_b, ~r(:), "")
+    e_mem_prep_d = String.replace(e_mem_prep_c, ~r( ), "")
+    e_mem_prep_e = String.replace(e_mem_prep_d, ~r(_), "0")
+    e_mem_prep_final = Regex.run(~r(Active[0-9]{1,100}), e_mem_prep_e) |> List.to_string()
+    create_mem_e_atom = String.slice(e_mem_prep_final, 0..5) |> String.to_atom()
+    create_mem_e_int = String.slice(e_mem_prep_final, 6..600) |> String.to_integer()
 
     # (f) generate & insert Dirty data from /proc/meminfo
-    f_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_f = String.slice(f_mem, 448..471)
-    mem_f_clean_prep = String.replace(mem_f, ~r(:), "")
-    mem_f_clean = String.replace(mem_f_clean_prep, ~r( ), "")
-    create_mem_f_atom = String.slice(mem_f_clean, 0..4) |> String.to_atom()
-    create_mem_f_int = String.slice(mem_f_clean, 5..60) |> String.to_integer()
+    f_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    f_mem_prep_a = String.replace(f_mem_raw, ~r(kB\n), "")
+    f_mem_prep_b = String.replace(f_mem_prep_a, ~r(0\n), "")
+    f_mem_prep_c = String.replace(f_mem_prep_b, ~r(:), "")
+    f_mem_prep_d = String.replace(f_mem_prep_c, ~r( ), "")
+    f_mem_prep_e = String.replace(f_mem_prep_d, ~r(_), "0")
+    f_mem_prep_final = Regex.run(~r(Dirty[0-9]{1,100}), f_mem_prep_e) |> List.to_string()
+    create_mem_f_atom = String.slice(f_mem_prep_final, 0..4) |> String.to_atom()
+    create_mem_f_int = String.slice(f_mem_prep_final, 5..500) |> String.to_integer()
 
     # (g) generate & insert SwapFree data from /proc/meminfo
-    g_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_g = String.slice(g_mem, 420..443)
-    mem_g_clean_prep = String.replace(mem_g, ~r(:), "")
-    mem_g_clean = String.replace(mem_g_clean_prep, ~r( ), "")
-    create_mem_g_atom = String.slice(mem_g_clean, 0..7) |> String.to_atom()
-    create_mem_g_int = String.slice(mem_g_clean, 8..140) |> String.to_integer()
+    g_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    g_mem_prep_a = String.replace(g_mem_raw, ~r(kB\n), "")
+    g_mem_prep_b = String.replace(g_mem_prep_a, ~r(0\n), "")
+    g_mem_prep_c = String.replace(g_mem_prep_b, ~r(:), "")
+    g_mem_prep_d = String.replace(g_mem_prep_c, ~r( ), "")
+    g_mem_prep_e = String.replace(g_mem_prep_d, ~r(_), "0")
+    g_mem_prep_final = Regex.run(~r(SwapFree[0-9]{1,100}), g_mem_prep_e) |> List.to_string()
+    create_mem_g_atom = String.slice(g_mem_prep_final, 0..7) |> String.to_atom()
+    create_mem_g_int = String.slice(g_mem_prep_final, 8..800) |> String.to_integer()
 
     # (h) generate & insert PageTables data from /proc/meminfo
-    h_mem = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
-    mem_h = String.slice(h_mem, 728..751)
-    mem_h_clean_prep = String.replace(mem_h, ~r(:), "")
-    mem_h_clean = String.replace(mem_h_clean_prep, ~r( ), "")
-    create_mem_h_atom = String.slice(mem_h_clean, 0..11) |> String.to_atom()
-    create_mem_h_int = String.slice(mem_h_clean, 12..120) |> String.to_integer()
+    h_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    h_mem_prep_a = String.replace(h_mem_raw, ~r(kB\n), "")
+    h_mem_prep_b = String.replace(h_mem_prep_a, ~r(0\n), "")
+    h_mem_prep_c = String.replace(h_mem_prep_b, ~r(:), "")
+    h_mem_prep_d = String.replace(h_mem_prep_c, ~r( ), "")
+    h_mem_prep_e = String.replace(h_mem_prep_d, ~r(_), "0")
+    h_mem_prep_final = Regex.run(~r(PageTables[0-9]{1,100}), h_mem_prep_e) |> List.to_string()
+    create_mem_h_atom = String.slice(h_mem_prep_final, 0..9) |> String.to_atom()
+    create_mem_h_int = String.slice(h_mem_prep_final, 10..1000) |> String.to_integer()
 
     # (i) generate & insert Writeback data from /proc/meminfo
+    i_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    i_mem_prep_a = String.replace(i_mem_raw, ~r(kB\n), "")
+    i_mem_prep_b = String.replace(i_mem_prep_a, ~r(0\n), "")
+    i_mem_prep_c = String.replace(i_mem_prep_b, ~r(:), "")
+    i_mem_prep_d = String.replace(i_mem_prep_c, ~r( ), "")
+    i_mem_prep_e = String.replace(i_mem_prep_d, ~r(_), "0")
+    i_mem_prep_final = Regex.run(~r(Writeback[0-9]{1,100}), i_mem_prep_e) |> List.to_string()
+    create_mem_i_atom = String.slice(i_mem_prep_final, 0..8) |> String.to_atom()
+    create_mem_i_int = String.slice(i_mem_prep_final, 9..900) |> String.to_integer()
+
     # (j) generate & insert NFS_Unstable data from /proc/meminfo
+    j_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    j_mem_prep_a = String.replace(j_mem_raw, ~r(kB\n), "")
+    j_mem_prep_b = String.replace(j_mem_prep_a, ~r(0\n), "")
+    j_mem_prep_c = String.replace(j_mem_prep_b, ~r(:), "")
+    j_mem_prep_d = String.replace(j_mem_prep_c, ~r( ), "")
+    j_mem_prep_e = String.replace(j_mem_prep_d, ~r(_), "0")
+    j_mem_prep_f = String.replace(j_mem_prep_e, ~r(NFS0Unstable), "NFS_Unstable")
+    j_mem_prep_final = Regex.run(~r(NFS_Unstable[0-9]{1,100}), j_mem_prep_f) |> List.to_string()
+    create_mem_j_atom = String.slice(j_mem_prep_final, 0..11) |> String.to_atom()
+    create_mem_j_int = String.slice(j_mem_prep_final, 12..1200) |> String.to_integer()
+
+    # (k) generate & insert MemTotal data from /proc/meminfo
+    k_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    k_mem_prep_a = String.replace(k_mem_raw, ~r(kB\n), "")
+    k_mem_prep_b = String.replace(k_mem_prep_a, ~r(0\n), "")
+    k_mem_prep_c = String.replace(k_mem_prep_b, ~r(:), "")
+    k_mem_prep_d = String.replace(k_mem_prep_c, ~r( ), "")
+    k_mem_prep_e = String.replace(k_mem_prep_d, ~r(_), "0")
+    k_mem_prep_final = Regex.run(~r(MemTotal[0-9]{1,100}), k_mem_prep_e) |> List.to_string()
+    create_mem_k_atom = String.slice(k_mem_prep_final, 0..9) |> String.to_atom()
+    create_mem_k_int = String.slice(k_mem_prep_final, 10..1000) |> String.to_integer()
+
+    # (l) generate & insert SwapTotal data from /proc/meminfo
+    l_mem_raw = System.cmd("cat", ["/proc/meminfo"]) |> Kernel.elem(0)
+    l_mem_prep_a = String.replace(l_mem_raw, ~r(kB\n), "")
+    l_mem_prep_b = String.replace(l_mem_prep_a, ~r(0\n), "")
+    l_mem_prep_c = String.replace(l_mem_prep_b, ~r(:), "")
+    l_mem_prep_d = String.replace(l_mem_prep_c, ~r( ), "")
+    l_mem_prep_e = String.replace(l_mem_prep_d, ~r(_), "0")
+    l_mem_prep_final = Regex.run(~r(SwapTotal[0-9]{1,100}), l_mem_prep_e) |> List.to_string()
+    create_mem_l_atom = String.slice(l_mem_prep_final, 0..8) |> String.to_atom()
+    create_mem_l_int = String.slice(l_mem_prep_final, 9..900) |> String.to_integer()
 
     # Insert cleaned data
     Mem.create_meminfo(%{
@@ -98,6 +164,10 @@ defmodule Systemstats.Mem.Meminfo.Generator do
       create_mem_f_atom => create_mem_f_int,
       create_mem_g_atom => create_mem_g_int,
       create_mem_h_atom => create_mem_h_int,
+      create_mem_i_atom => create_mem_i_int,
+      create_mem_j_atom => create_mem_j_int,
+      create_mem_k_atom => create_mem_k_int,
+      create_mem_l_atom => create_mem_l_int,
     })
   end
 

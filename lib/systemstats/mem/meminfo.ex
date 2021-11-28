@@ -1,3 +1,5 @@
+# Schema and changeset for the memory API data
+# Configure validation once pipeline is complete
 defmodule Systemstats.Mem.Meminfo do
   use Ecto.Schema
   import Ecto.Changeset

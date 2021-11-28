@@ -1,4 +1,4 @@
-# The Mem context -> houses API pipielines of memory data, along with related schemas/tables + changesets + pubsub utilities
+# The Mem context -> houses API functions (CRUD) for memory data, along with related schemas/tables + changesets + pubsub utilities
 defmodule Systemstats.Mem do
   import Ecto.Query, warn: false
 
@@ -10,15 +10,15 @@ defmodule Systemstats.Mem do
 
   # BEGIN API CONFIGURATION
   #
-  # Returns a list of all meminfo records
+  # Returns a list of all meminfo records (GET)
   def list_meminfos do
     Repo.all(Meminfos)
   end
 
-  # Returns a single record of meminfo
+  # Returns a single record of meminfo (GET)
   def get_meminfo!(id), do: Repo.get!(Meminfo, id)
 
-  # Create meminfo and insert new record into meminfos table
+  # Create meminfo and insert new record into meminfos table (CREATE)
   # Then, broadcast status to subscribers via notification, which is delivered in their local message box
   def create_meminfo(attrs \\ %{}) do
     %Meminfo{}
@@ -27,19 +27,19 @@ defmodule Systemstats.Mem do
     |> broadcast(:meminfo_inserted)
   end
 
-  # Update meminfo record
+  # Update meminfo record (UPDATE)
   def update_meminfo(%Meminfo{} = meminfo, attrs) do
     meminfo
     |> Meminfo.changeset(attrs)
     |> Repo.update()
   end
 
-  # Deletes meminfo record
+  # Deletes meminfo record (DELETE)
   def delete_meminfo(%Meminfo{} = meminfo) do
     Repo.delete(meminfo)
   end
 
-  # Returns an Ecto changeset for tracking meminfo changes
+  # Returns an Ecto changeset for tracking meminfo changes (CREATEs a changeset for the UPDATE function)
   def change_meminfo(%Meminfo{} = meminfo, attrs \\ %{}) do
     Meminfo.changeset(meminfo, attrs)
   end
