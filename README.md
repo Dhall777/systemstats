@@ -1,8 +1,7 @@
 ## Project summary
 
 The main idea is to read system statistics from the proc virtual filesystem (pvf) in real-time.
-Right now, I've only cleaned up the memory information part, which kinda makes this a proof of concept at the moment.
-The plan is to expand this application into the entirety of pvf.
+Right now, I've only cleaned up the memory information portion, but the plan is to expand this application into the entirety of proc filesystem
 More on the proc filesystem can be found below:
 	- [Linux Kernel Docs | The /proc Filesystem](https://www.kernel.org/doc/html/latest/filesystems/proc.html)
 	- Per GPT-3.5:
